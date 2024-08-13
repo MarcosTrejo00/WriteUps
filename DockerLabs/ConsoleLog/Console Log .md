@@ -2,7 +2,7 @@
 
 En esta lectura se documentara el paso a paso para resolver la maquina ConsoleLog de la plataforma DockerLabs
 
-![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image.png)
+![image.png](Console%20Log/image.png)
 
 Descargamos y desplegamos : 
 
