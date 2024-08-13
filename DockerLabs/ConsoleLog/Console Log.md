@@ -31,8 +31,6 @@ nmap -A -p 80,3000,5000 -Pn -n 172.17.0.2
 ```
 
 ![image.png](Console%20Log/image%204.png)
-=======
-![image.png](Console%20Log/image%204.png)
 
 Notamos que los primeros son dos paginas web http y el ultimo es ssh pero en un puerto no estándar
 
@@ -43,9 +41,6 @@ whatweb http::172.17.0.2
 ```
 
 ![image.png](Console%20Log/image%205.png)
-=======
-![image.png](Console%20Log/image%205.png)
->>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
 
 Vamos a ingresar al puerto 80 haber que encontramos : 
 
@@ -89,9 +84,8 @@ esa contraseña en texto plano ahí ubicada es muy rara, tenemos un puerto con s
 hydra -L /usr/share/wordlists/rockyou.txt -p password ssh://172.17.0.2:5000 -t 64
 ```
 
-![image.png](Console%20Log%20/image%2013.png)
-=======
 ![image.png](Console%20Log/image%2013.png)
+
 Encontramos al usuario lovely con la contraseña conseguida porque estaba expuesta en texto plano, por lo que nos conectamos mediante ssh al puerto indicado en el escaneo.
 
 ```bash
@@ -122,6 +116,7 @@ La primera cambiarle los permiso a la bash con **`chmod u+s /bin/bash`**para que
 
 ![image.png](Console%20Log/image%2018.png)
 
+Probamos ejecutar una bash de root con el usuario lovely y vemos que es posible.
 ![image.png](Console%20Log/image%2019.png)
 
 La segunda es mandar una **shell** reversa a un puerto de nuestra maquina atacante y ponernos en escucha con netcat a dicho puerto.
