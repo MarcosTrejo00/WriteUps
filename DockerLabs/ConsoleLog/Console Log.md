@@ -16,7 +16,7 @@ Con ping comprobamos que la misma esta activa, el TTL de 64 nos indica que es un
 
 Realizamos un escaneo con Nmap utilizando un Syn Scan, el cual es más rápido y discreto en entornos reales debido a que no completa el saludo de tres vías. Esto nos permite detectar puertos abiertos de manera eficiente sin establecer conexiones completas, reduciendo así la probabilidad de ser detectados.
 
-```jsx
+```bash
 nmap -sS -p- --open -Pn -n --min-rate=5000 172.17.0.2
 ```
 
@@ -24,9 +24,8 @@ Encontramos abiertos los siguientes puertos :
 
 ![image.png](Console%20Log/image%203.png)
 
-Realizamos un nuevo escaneo con Nmap, esta vez enfocado únicamente en los puertos abiertos y utilizando el parámetro `-A`. Este parámetro ejecuta un conjunto de scripts de Nmap que permite identificar las versiones de los servicios y del sistema operativo en ejecución."
+Realizamos un nuevo escaneo con Nmap, esta vez enfocado únicamente en los puertos abiertos y utilizando el parámetro `-A`. Este parámetro ejecuta un conjunto de scripts de Nmap que permite identificar las versiones de los servicios y del sistema operativo en ejecución.
 
-<<<<<<< HEAD:DockerLabs/ConsoleLog/Console Log.md
 ```bash
 nmap -A -p 80,3000,5000 -Pn -n 172.17.0.2
 ```
@@ -34,13 +33,11 @@ nmap -A -p 80,3000,5000 -Pn -n 172.17.0.2
 ![image.png](Console%20Log/image%204.png)
 =======
 ![image.png](Console%20Log/image%204.png)
->>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
 
 Notamos que los primeros son dos paginas web http y el ultimo es ssh pero en un puerto no estándar
 
 Consultamos a la herramienta **`whatweb`** para ver con que tecnologías esta diseñada la web.
 
-<<<<<<< HEAD:DockerLabs/ConsoleLog/Console Log.md
 ```bash
 whatweb http::172.17.0.2
 ```
@@ -88,7 +85,6 @@ Encontramos este server.js que me da mucha curiosidad…
 
 esa contraseña en texto plano ahí ubicada es muy rara, tenemos un puerto con ssh abierto por lo que vamos a intentar averiguar con hydra si algún usuario la esta utilizando :
 
-<<<<<<< HEAD:DockerLabs/ConsoleLog/Console Log.md
 ```bash
 hydra -L /usr/share/wordlists/rockyou.txt -p password ssh://172.17.0.2:5000 -t 64
 ```
@@ -96,8 +92,6 @@ hydra -L /usr/share/wordlists/rockyou.txt -p password ssh://172.17.0.2:5000 -t 6
 ![image.png](Console%20Log%20/image%2013.png)
 =======
 ![image.png](Console%20Log/image%2013.png)
->>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
-
 Encontramos al usuario lovely con la contraseña conseguida porque estaba expuesta en texto plano, por lo que nos conectamos mediante ssh al puerto indicado en el escaneo.
 
 ```bash
