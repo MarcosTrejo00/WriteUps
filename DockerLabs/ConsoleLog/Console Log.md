@@ -31,7 +31,7 @@ Realizamos un nuevo escaneo con Nmap, esta vez enfocado únicamente en los puert
 nmap -A -p 80,3000,5000 -Pn -n 172.17.0.2
 ```
 
-![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%204.png)
+![image.png](Console%20Log/image%204.png)
 =======
 ![image.png](Console%20Log/image%204.png)
 >>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
@@ -45,7 +45,7 @@ Consultamos a la herramienta **`whatweb`** para ver con que tecnologías esta di
 whatweb http::172.17.0.2
 ```
 
-![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%205.png)
+![image.png](Console%20Log/image%205.png)
 =======
 ![image.png](Console%20Log/image%205.png)
 >>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
@@ -93,7 +93,7 @@ esa contraseña en texto plano ahí ubicada es muy rara, tenemos un puerto con s
 hydra -L /usr/share/wordlists/rockyou.txt -p password ssh://172.17.0.2:5000 -t 64
 ```
 
-![image.png](Console%20Log%20c8effc909a3f432cb5e414be49210889/image%2013.png)
+![image.png](Console%20Log%20/image%2013.png)
 =======
 ![image.png](Console%20Log/image%2013.png)
 >>>>>>> d081d6e81c78923b66e2fddcb1645c5d39142d88:DockerLabs/ConsoleLog/Console Log .md
